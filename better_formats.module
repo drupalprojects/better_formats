@@ -311,8 +311,6 @@ function better_formats_text_process($element, $edit, $form_state, $form) {
 
     // Overwrite format default if new node unless the field has a default text
     // or is being previewed.
-    dsm($element);
-    dsm($format);
     if ((!isset($form_state['values']['nid']) && !isset($element['#default_value']['value'])) || empty($format)) {
       $format = $default;
     }
