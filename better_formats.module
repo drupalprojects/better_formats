@@ -629,7 +629,7 @@ function better_formats_filter_form($value = FILTER_FORMAT_DEFAULT, $default_for
  */
 function theme_better_formats_filter_tips_more_info() {
   $text = variable_get('better_formats_long_tips_link_text', '');
-  if (module_exists('i18n_strings') && $text) {
+  if (module_exists('i18nstrings') && $text) {
     $text = i18nstrings($text);
   }
   else {
