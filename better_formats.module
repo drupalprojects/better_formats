@@ -552,8 +552,8 @@ function better_formats_filter_form($value = FILTER_FORMAT_DEFAULT, $default_for
     $collapsible    = user_access('collapsible format selection');
     $fieldset_title = variable_get('better_formats_fieldset_title', '');
 
-    if (module_exists('i18n_strings') && $fieldset_title) {
-      $fieldset_title = tt($fieldset_title);
+    if (module_exists('i18nstrings') && $fieldset_title) {
+      $fieldset_title = i18nstrings('better_formats:fieldset_title', $fieldset_title);
     }
     else {
       $fieldset_title = $fieldset_title ? $fieldset_title : t('Input format');
@@ -652,8 +652,8 @@ function better_formats_filter_form($value = FILTER_FORMAT_DEFAULT, $default_for
  */
 function theme_better_formats_filter_tips_more_info() {
   $text = variable_get('better_formats_long_tips_link_text', '');
-  if (module_exists('i18n_strings') && $text) {
-    $text = tt($text);
+  if (module_exists('i18nstrings') && $text) {
+    $text = i18nstrings('better_formats:tips_link', $text);
   }
   else {
     $text = $text ? $text : t('More information about formatting options');
