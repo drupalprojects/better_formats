@@ -465,9 +465,9 @@ function better_formats_get_default_format($mode, $node_type = '') {
     // Get user's lowest weight role default.
     $sql = "SELECT format
             FROM {better_formats_defaults}
-            WHERE rid IN (%s) AND type IN ('$types')
+            WHERE rid IN ($roles) AND type IN ('$types')
             ORDER BY type_weight DESC, weight ASC";
-    $row = db_fetch_object(db_query_range($sql, $roles, 0, 1));
+    $row = db_fetch_object(db_query_range($sql, 0, 1));
     $format[$type] = filter_resolve_format($row->format);
   }
 
