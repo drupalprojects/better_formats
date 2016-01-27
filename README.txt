@@ -2,7 +2,7 @@ This very basic documentation for during development.
 Better docs will be generated closer to a full release.
 
 
-The only items currently implented in the D7 version of Better Formats are:
+The only items currently implemented in the D8 version of Better Formats are:
 
 1. Display options: When BF is enabled you will have permissions at
    admin/people/permissions to control per role display of:
@@ -19,12 +19,14 @@ The only items currently implented in the D7 version of Better Formats are:
    to set the format WITHOUT having to set a value in the field.
 
    1. At admin/config/content/formats/settings enable "Use field default" option.
-   2. Create a text type of field on one of your content types.
-   3. Ensure you set the "Text processing" option to "Filtered text".
-   4. Save the field.
-   5. Now go back and edit the field you just saved. This is required because of
+   2. Create a field on one of your entities with one of the following types: Text, Long Text, Long text with summary.
+   3. Save the field.
+   4. Now go back and edit the field you just saved. This is required because of
       how the field default value option works.
-   6. You will now see a "Text format" dropdown below your field in the
+   5. You will now see a "Text format" dropdown below your field in the
       "Default Value" area. Set the default format in the dropdown.
-   7. Save the field. Default will now be used on all new content forms for that field.
+   6. Save the field. Default will now be used on all new content forms for that field.
 
+3. Allowed format selection for each text field.
+
+4. Ordering of formats in Formats select box for each text field.
