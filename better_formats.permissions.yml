@@ -1,6 +1,6 @@
 show format tips:
   title: 'Show format tips'
-  description: 'Toggle display of format description help'
+  description: 'Toggle display of format description help.'
 
 show more format tips link:
   title:  'Show more format tips link'
