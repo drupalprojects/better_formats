@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\better_formats\Form\SettingsForm.
- */
-
 namespace Drupal\better_formats\Form;
 
 use Drupal\Core\Form\ConfigFormBase;

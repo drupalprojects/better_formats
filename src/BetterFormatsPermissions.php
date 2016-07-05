@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\better_formats\BetterFormatPermissions.
- */
-
 namespace Drupal\better_formats;
 
 /**
