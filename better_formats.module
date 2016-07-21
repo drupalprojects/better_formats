@@ -47,15 +47,16 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
     $entity = $form_state->getFormObject()->getEntity();
     $entity_type = $entity->getEntityTypeId();
     $field_name = reset($element['#parents']);
-    $fd = $entity->getFieldDefinition($field_name);
-    if ($fd instanceof Drupal\Core\Config\Entity\ThirdPartySettingsInterface) {
-      $bf = $fd->getThirdPartySettings('better_formats');
-    }
+    $field_definition = $entity->getFieldDefinition($field_name);
 
-    if (Drupal::config('better_formats.settings')->get('per_field_core')) {
-      $field_defaults = $entity->getFieldDefinition($field_name)->getDefaultValue($entity);
-      $default_value = array_shift($field_defaults);
-      better_formats_set_default_format($element, $default_value['format']);
+    if ($field_definition instanceof ThirdPartySettingsInterface) {
+      $bf = $field_definition->getThirdPartySettings('better_formats');
+
+      if (Drupal::config('better_formats.settings')->get('per_field_core')) {
+        $field_defaults = $field_definition->getDefaultValue($entity);
+        $default_value = array_shift($field_defaults);
+        better_formats_set_default_format($element, $default_value['format']);
+      }
     }
   }
   elseif ($form_object instanceof Drupal\field_ui\Form\FieldConfigEditForm) {
@@ -73,8 +74,8 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
   if ($entity_type != NULL) {
     $show_selection = \Drupal::currentUser()->hasPermission('show format selection for ' . $entity_type);
   }
-  $show_tips       = \Drupal::currentUser()->hasPermission('show format tips');
-  $show_tips_link  = \Drupal::currentUser()->hasPermission('show more format tips link');
+  $show_tips = \Drupal::currentUser()->hasPermission('show format tips');
+  $show_tips_link = \Drupal::currentUser()->hasPermission('show more format tips link');
   if (!$show_selection) {
     $element['format']['format']['#access'] = FALSE;
   }
