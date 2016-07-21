@@ -47,7 +47,10 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
     $entity = $form_state->getFormObject()->getEntity();
     $entity_type = $entity->getEntityTypeId();
     $field_name = array_shift($element['#parents']);
-    $bf = $entity->getFieldDefinition($field_name)->getThirdPartySettings('better_formats');
+    $fd = $entity->getFieldDefinition($field_name);
+    if ($fd instanceof Drupal\Core\Config\Entity\ThirdPartySettingsInterface) {
+      $bf = $fd->getThirdPartySettings('better_formats');
+    }
 
     if (Drupal::config('better_formats.settings')->get('per_field_core')) {
       $field_defaults = $entity->getFieldDefinition($field_name)->getDefaultValue($entity);
