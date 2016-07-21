@@ -5,6 +5,7 @@
  * Better Formats module, for altering the Text Format selection and information.
  */
 
+use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
@@ -12,10 +13,12 @@ use Drupal\Core\Render\Element;
  * Implements hook_element_info_alter().
  */
 function better_formats_element_info_alter(array &$types) {
-  // Our process callback must run immediately after TextFormat::processFormat().
+  // Our process callback must run immediately after
+  // TextFormat::processFormat().
   if (isset($types['text_format']) && isset($types['text_format']['#process'])) {
     $search_value = ['Drupal\filter\Element\TextFormat', 'processFormat'];
     $key = array_search($search_value, $types['text_format']['#process']);
+
     if ($key !== FALSE) {
       $key++;
       array_splice($types['text_format']['#process'], $key, 0, 'better_formats_filter_process_format');
@@ -43,6 +46,7 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
   $access_denied_for_security = isset($element['format']['format']['#access']) && !$element['format']['format']['#access'];
 
   $form_object = $form_state->getFormObject();
+
   if ($form_object instanceof Drupal\Core\Entity\ContentEntityForm) {
     $entity = $form_state->getFormObject()->getEntity();
     $entity_type = $entity->getEntityTypeId();
@@ -71,17 +75,22 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
   // Now hide several parts of the element for cosmetic reasons (depending on
   // the permissions of the current user).
   $show_selection = TRUE;
+
   if ($entity_type != NULL) {
     $show_selection = \Drupal::currentUser()->hasPermission('show format selection for ' . $entity_type);
   }
+
   $show_tips = \Drupal::currentUser()->hasPermission('show format tips');
   $show_tips_link = \Drupal::currentUser()->hasPermission('show more format tips link');
+
   if (!$show_selection) {
     $element['format']['format']['#access'] = FALSE;
   }
+
   if (!$show_tips) {
     $element['format']['guidelines']['#access'] = FALSE;
   }
+
   if (!$show_tips_link) {
     $element['format']['help']['#access'] = FALSE;
   }
@@ -94,19 +103,23 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
   // current values, and we should not do anything to alter that process.
   if ($entity_type != NULL && !$access_denied_for_security) {
     $eid = $entity->id();
+
     // Need to only do this on create forms.
     if (empty($eid) && isset($bf) && !empty($bf['default_order_toggle']) && !empty($bf['default_order_wrapper']['formats'])) {
       $order = $bf['default_order_wrapper']['formats'];
       uasort($order, 'better_formats_text_format_sort');
 
       $options = [];
+
       foreach ($order as $id => $weight) {
         if (isset($element['format']['format']['#options'][$id])) {
           $options[$id] = $element['format']['format']['#options'][$id];
         }
       }
+
       $element['format']['format']['#options'] = $options;
       $options_keys = array_keys($options);
+
       if (!Drupal::config('better_formats.settings')->get('per_field_core')) {
         better_formats_set_default_format($element, array_shift($options_keys));
       }
@@ -180,6 +193,7 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
   if (!$show_selection && !$show_tips && !$show_tips_link) {
     $element['format']['#type'] = 'container';
   }
+
   return $element;
 }
 
@@ -240,6 +254,7 @@ function better_formats_form_field_config_edit_form_alter(&$form, FormStateInter
   // Only alter fields with text processing and if admin has chosen.
   $text_processing = better_formats_is_text_format($entity->getType());
   $config = Drupal::config('better_formats.settings');
+
   if ($text_processing && $config->get('per_field_core')) {
     // Add a submit handler to save default values on empty fields.
     $form['actions']['submit']['#submit'][] = 'better_formats_field_config_edit_form_submit';
@@ -251,6 +266,7 @@ function better_formats_form_field_config_edit_form_alter(&$form, FormStateInter
     // We have to set an explicit weight here so that we can put the allowed
     // formats list after it.
     $bf_settings = $entity->getThirdPartySettings('better_formats') != NULL ? $entity->getThirdPartySettings('better_formats') : [];
+
     // Add in the better formats table.
     $form['third_party_settings'] += better_formats_field_settings_form($bf_settings);
     $form['third_party_settings']['#weight'] = -4;
@@ -268,6 +284,7 @@ function better_formats_form_field_config_edit_form_alter(&$form, FormStateInter
  */
 function better_formats_field_settings_form($bf_form = []) {
   $formats = filter_formats();
+
   // Plain Text Format should not be an option, that is a separate field type.
   unset($formats['plain_text']);
 
@@ -280,12 +297,14 @@ function better_formats_field_settings_form($bf_form = []) {
   ];
 
   $allowed_options = [];
+
   foreach ($formats as $format) {
     $allowed_options[$format->id()] = $format->label();
   }
 
   $allowed_toggle_default = isset($bf_form['allowed_formats_toggle']) ? $bf_form['allowed_formats_toggle'] : FALSE;
   $allowed_defaults = isset($bf_form['allowed_formats']) ? $bf_form['allowed_formats'] : [];
+
   if (empty($allowed_defaults)) {
     $allowed_defaults = array_keys($allowed_options);
   }
@@ -312,6 +331,7 @@ function better_formats_field_settings_form($bf_form = []) {
   ];
 
   $order_toggle_default = isset($bf_form['default_order_toggle']) ? $bf_form['default_order_toggle'] : FALSE;
+
   $form['better_formats']['default_order_toggle'] = [
     '#type' => 'checkbox',
     '#title' => t('Override default order'),
@@ -391,9 +411,11 @@ function better_formats_field_config_edit_form_submit(array &$form, FormStateInt
     // Handle the default value.
     $default_value = [];
     $default_input_value = $form_state->getValue(['default_value_input', $entity->getName()]);
+
     if ($default_input_value != NULL) {
       $default_value = $default_input_value;
     }
+
     $entity->setDefaultValue($default_value)->save();
   }
 }
