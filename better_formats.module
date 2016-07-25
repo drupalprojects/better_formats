@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Better Formats module, for altering the Text Format selection and information.
+ * Enhances the core input format system by managing input format defaults and settings.
  */
 
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;

@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Install, update and uninstall functions for the better_formats module.
+ */
+
+/**
  * Implements of hook_install().
  */
 function better_formats_install() {
