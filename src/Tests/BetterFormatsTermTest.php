@@ -2,14 +2,14 @@
 
 namespace Drupal\better_formats\Tests;
 
-use Drupal\filter\Tests\FilterFormatAccessTest;
+use Drupal\taxonomy\Tests\TermTest;
 
 /**
- * Copy of FilterFormatAccessTest.
+ * Copy of TermTest.
  *
  * @group better_formats
  */
-class BetterFormatsFilterFormatAccessTest extends FilterFormatAccessTest {
+class BetterFormatsTermTest extends TermTest {
 
   /**
    * Modules to enable.
