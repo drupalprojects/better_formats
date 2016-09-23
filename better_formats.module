@@ -74,24 +74,34 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
 
   // Now hide several parts of the element for cosmetic reasons (depending on
   // the permissions of the current user).
+  $user = \Drupal::currentUser();
+  $user_is_admin = $user->hasPermission('administer filters');
+
+  // The selection should be shown unless proven otherwise.
   $hide_selection = FALSE;
 
+  // If an entity is available then allow Better Formats permission to control
+  // visibility.
   if ($entity_type != NULL) {
-    $hide_selection = \Drupal::currentUser()->hasPermission('hide format selection for ' . $entity_type);
+    $hide_selection = $user->hasPermission('hide format selection for ' . $entity_type);
   }
 
-  $hide_tips = \Drupal::currentUser()->hasPermission('hide format tips');
-  $hide_tips_link = \Drupal::currentUser()->hasPermission('hide more format tips link');
-
-  if ($hide_selection) {
+  // Privileged users should still be able to change the format selection.
+  if ($hide_selection && !$user_is_admin) {
     $element['format']['format']['#access'] = FALSE;
   }
 
-  if ($hide_tips) {
+  // Allow formats tips to be hidden.
+  $hide_tips = $user->hasPermission('hide format tips');
+
+  if ($hide_tips && !$user_is_admin) {
     $element['format']['guidelines']['#access'] = FALSE;
   }
 
-  if ($hide_tips_link) {
+  // Allow format tips link to be hidden.
+  $hide_tips_link = $user->hasPermission('hide more format tips link');
+
+  if ($hide_tips_link && !$user_is_admin) {
     $element['format']['help']['#access'] = FALSE;
   }
 
