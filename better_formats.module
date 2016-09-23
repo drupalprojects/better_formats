@@ -188,10 +188,10 @@ function better_formats_filter_process_format(array &$element, FormStateInterfac
     }
   }
 
-  // Hide the entire text format fieldset if the user is not supposed to see
-  // anything inside it.
-  if ($hide_selection && !$hide_tips && !$hide_tips_link) {
-    $element['format']['#type'] = 'container';
+  // Keep the format for validation and submit processing but don't sent it to
+  // the browser if the user is not supposed to see anything inside of it.
+  if ($hide_selection && $hide_tips && $hide_tips_link) {
+    unset($element['format']['#type']);
   }
 
   return $element;
