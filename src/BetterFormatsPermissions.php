@@ -24,7 +24,7 @@ class BetterFormatsPermissions {
     foreach (\Drupal::entityManager()->getDefinitions() as $entity_type_id => $entity_type) {
       if ($entity_type->get('field_ui_base_route')) {
         $permissions['hide format selection for ' . $entity_type_id] = [
-          'title' => t('Hide format selection for @entitys', ['@entity' => $entity_type_id]),
+          'title' => t('Hide format selection for @label', ['@label' => $entity_type->getLabel()]),
         ];
       }
     }
